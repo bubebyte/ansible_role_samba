@@ -11,7 +11,7 @@
 - name: Update smb.conf
   ansible.builtin.template:
     src: smb.conf.j2
-    dest: /home/armin/smb.conf
+    dest: /etc/samba/smb.conf
     owner: root
     group: root
     mode: '0644'
