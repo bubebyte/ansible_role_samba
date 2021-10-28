@@ -1,0 +1,47 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: Gather service facts
+      service_facts:
+
+    - name: Gather listening ports
+      community.general.listen_ports_facts:
+
+    - name: "DEBUG: Print status of smb.service"
+      debug:
+        var: ansible_facts.services["smb.service"]
+
+    - name: "DEBUG: Print ansible_facts.tcp_listen"
+      debug:
+        var: ansible_facts.tcp_listen
+
+    - name: "Create empty list to store master listen ports"
+      ansible.builtin.set_fact:
+        tcp_listen_ports: []
+
+    - name: "Store master listen ports"
+      ansible.builtin.set_fact:
+        tcp_listen_ports: "{{ tcp_listen_ports + [item] }}"
+      loop: "{{ ansible_facts.tcp_listen | select('search', 'smbd') | map(attribute='port') | unique | list }}"
+
+    - name: Fail if samba is not listening on a tcp port
+      fail:
+        msg: Samba is not listening on a tcp port
+      when: tcp_listen_ports | length == 0
+
+    - name: Additional checks of RHEL based systems
+      block:
+        - name: Check samba service state
+          fail:
+            msg: The service postfix is not running.
+          when: ansible_facts.services["smb.service"].state != "running"
+
+        - name: Check samba service state
+          fail:
+            msg: The service postfix is not enabled.
+          when: ansible_facts.services["smb.service"].status != "enabled"
+      when: ansible_os_family == "RedHat"
