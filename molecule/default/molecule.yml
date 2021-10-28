@@ -10,7 +10,7 @@ lint: |
   yamllint -d "{extends: default, rules: {line-length: {max: 140, level: warning}}, ignore: .github/workflows/molecule.yml}" .
   ansible-lint --exclude .github
 platforms:
-  - name: "postfix-${image:-docker-centos8-ansible}"
+  - name: "samba-${image:-docker-centos8-ansible}"
     image: "${namespace:-geerlingguy}/${image:-docker-centos8-ansible}:${tag:-latest}"
     command: ${docker_command:-""}
     volumes:
