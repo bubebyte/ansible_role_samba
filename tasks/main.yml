@@ -1,0 +1,24 @@
+---
+- name: Install samba packages
+  package:
+    name:
+      - samba
+      - samba-client
+      - samba-common
+      - cifs-utils
+    state: present
+
+- name: Update smb.conf
+  ansible.builtin.template:
+    src: smb.conf.j2
+    dest: /home/armin/smb.conf
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart samba service
+
+- name: Enable and start samba service
+  ansible.builtin.service:
+    name: smb
+    state: started
+    enabled: true
