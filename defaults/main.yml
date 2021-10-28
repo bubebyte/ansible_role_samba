@@ -6,20 +6,20 @@ samba_smb_conf:
     'passdb backend': tdbsam
     printing: cups
     'printcap name': cups
-    'load printers': yes
+    'load printers': true
     'cups options': raw
   homes:
     comment: 'Home Directories'
     'valid users': '%S, %D%w%S'
-    browseable: No
-    'read only': No
-    'inherit acls': Yes
+    browseable: false
+    'read only': false
+    'inherit acls': true
   printers:
     comment: 'All Printers'
     path: /var/tmp
-    printable: Yes
+    printable: true
     'create mask': '0600'
-    browseable: No
+    browseable: false
   'print$':
     comment: 'Printer Drivers'
     path: /var/lib/samba/drivers
