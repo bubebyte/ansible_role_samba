@@ -1,5 +1,5 @@
 ---
 - name: Restart samba service
   service:
-    name: smb
+    name: "{{ samba_daemon }}"
     state: restarted

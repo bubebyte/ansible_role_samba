@@ -1,4 +1,7 @@
 ---
+- name: Include OS specific variables
+  include_vars: "os_family_{{ ansible_os_family|lower }}.yml"
+
 - name: Install samba packages
   package:
     name:
@@ -19,6 +22,6 @@
 
 - name: Enable and start samba service
   ansible.builtin.service:
-    name: smb
+    name: "{{ samba_daemon }}"
     state: started
     enabled: true
